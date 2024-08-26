@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
-dotenv.config();
+const dotenv = require("dotenv");
+const { Client, GatewayIntentBits, Events } = require("discord.js");
 
-import { client, GatewayIntentBits } from "discord.js";
+dotenv.config();
 
 const client = new Client({
   intents: [
@@ -9,6 +9,7 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.MessageContent,
   ],
 });
 
@@ -19,9 +20,9 @@ client.once(Events.ClientReady, (readyClient) => {
 client.login(process.env.DISCORD_TOKEN);
 
 client.on("messageCreate", async (message) => {
-  console.log(message);
-
-  if (!message?.author.bot) {
-    message.author.send("Hello, I'm a bot!");
-  }
+  if (message.author.bot) return;
+  message
+    .reply("This is a reply!")
+    .then(() => console.log("test"))
+    .catch(console.error);
 });
